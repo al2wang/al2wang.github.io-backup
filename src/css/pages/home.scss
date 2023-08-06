@@ -1,0 +1,53 @@
+---
+---
+
+@use 'sass:math';
+
+@use 'common/media';
+@use 'common/rhythm';
+
+.portrait-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "nw ne"
+    "sw se";
+  grid-auto-flow: row;
+
+  margin: 0 auto;
+
+  // -layout.$pad-min for full-bleed on mobile
+  margin-left: -20px;
+  margin-right: -20px;
+
+  @include media.narrow {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  a {
+    line-height: 0;
+  }
+
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+  & > *:last-child {
+    img {
+      height: 100%;
+    }
+  }
+}
+
+figcaption {
+  @include rhythm.rhythm(1rem);
+
+  @include media.tablet {
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+  text-align: center;
+  font-style: italic;
+}

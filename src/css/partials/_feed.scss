@@ -1,0 +1,77 @@
+/*
+ * list-of-posts styles
+ */
+
+@use 'common/media';
+@use 'common/rhythm';
+@use 'common/theme';
+
+@use 'partials/post';
+
+article.post {
+  @include rhythm.leader(2.5);
+
+  // post permalink header layout, either
+  //
+  // title                  date
+  // └──subtitle
+  //
+  // or, in the unlikely degenerate case,
+  //
+  // title
+  //                        date
+  // └──subtitle
+  & > header {
+    & > time.date {
+      align-self: flex-end;
+
+      @include media.tablet {
+        align-self: auto;
+      }
+    }
+
+    @include media.tablet {
+      & > h1.title {
+        order: 1;
+      }
+      & > h2.subtitle {
+        order: 3;
+        flex-basis: 100%;
+      }
+      & > time.date {
+        order: 2;
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+// header link styling for a DOM hierarchy of
+//
+//  h1
+//    span
+//    svg
+//
+h1.title {
+  @include theme.link-container(var(--accent-left-lite), 3 * rhythm.$px);
+
+  & > a { font-weight: 600; }
+}
+
+// indent post excerpts
+section.post-content {
+  margin-left: 1.5rem;
+}
+
+figure.cover {
+  // keep cover pics from growing out of control
+  max-width: 42%;
+  @include media.tablet {
+    max-width: initial;
+  }
+}
+
+// outindent post titles?
+//h1.title {
+//  margin-left: -1.5rem;
+//}

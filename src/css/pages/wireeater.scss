@@ -1,0 +1,216 @@
+---
+---
+
+@use 'sass:math';
+
+@use 'common/flex';
+@use 'common/rhythm';
+@use 'common/theme';
+
+@use 'partials/piccy' with (
+  $prefix: 'wireeater'
+);
+@use 'partials/photoviewer' with (
+  $prefix: 'wireeater'
+);
+
+//----------------------------------------------------------
+// layout for this DOM hierarchy:
+//
+//  #wireeater
+//    #wireeater-selectors
+//      #wireeater-category
+//        #select-category
+//          [react-select stuff]
+//      #wireeater-tag
+//        #select-tag
+//          [react-select stuff]
+//    #wireeater-collection
+//      .wireeater-card
+//      ...
+
+// hide the data payload we render for the react component
+#wireeater-data {
+  display: none;
+}
+
+body > main {
+  max-width: initial;
+}
+
+#wireeater-container {
+  margin: auto;
+}
+
+#wireeater-selectors {
+  @include flex.vertical;
+  gap: rhythm.rh(1);
+
+  margin: auto;
+  max-width: 400px;
+}
+
+#wireeater-collection {
+  @include rhythm.margins(2);
+}
+
+//----------------------------------------------------------
+// text animations
+//
+// @see: https://codemyui.com/rainbow-text-animation/
+
+$max-elements: 50;
+$total-delay: 5;
+$delay-between: math.div($total-delay, $max-elements);
+
+@mixin text-color-animation {
+  animation-name: color-flow;
+  animation-duration: 30s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+
+  @for $i from 1 through $max-elements {
+    &:nth-of-type(#{$i}) {
+      animation-delay: #{($i * $delay-between) - $total-delay}s;
+    }
+  }
+}
+
+@keyframes color-flow {
+  @for $i from 0 through 20 {
+    #{percentage($i * (math.div(1, 20)))} {
+      color: hsla(random(365), 80%, 60%, 1);
+    }
+  }
+}
+
+.category__placeholder, .category__single-value, .category__option:hover {
+  & span {
+    @include text-color-animation;
+    transition: 1s;
+  }
+}
+
+.select-tags.active {
+  .tags__placeholder, .tags__single-value, .tags__option:hover {
+    & span {
+      @include text-color-animation;
+      transition: 1s;
+    }
+  }
+}
+
+//----------------------------------------------------------
+// card grid
+
+.wireeater-card-grid, .wireeater-card-column {
+  gap: 1rem;
+}
+
+//----------------------------------------------------------
+// cards
+//
+//  .wireeater-card-container
+//    .wireeater-card-cover
+//      .wireeater-piccy-*
+//      ||
+//      .wireeater-cover-embed
+//    header.wireeater-card-header
+//      .wireeater-card-title
+//    .wireeater-card-content
+
+.wireeater-card-container {
+  @include flex.vertical;
+
+  max-width: 480px;
+  padding: calc(1rem - 1px);
+  border: solid var(--fg-darkest) 1px;
+  border-radius: 1rem;
+}
+
+.wireeater-card-cover {
+  width: 100%;
+}
+
+.wireeater-cover-embed {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+
+  &.spotify {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+img.wireeater-piccy-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.wireeater-piccy-viewer {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+
+  @include rhythm.trailer(0.5);
+}
+
+.wireeater-piccy-left {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+.wireeater-piccy-right {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.wireeater-card-header {
+  @include rhythm.rhythm(1.75rem);
+  @include rhythm.margins(0.9);
+}
+
+.wireeater-card-title {
+  @include theme.link-container(var(--accent-color), 3 * rhythm.$px);
+
+  @media only screen and (min-width: 1200px) {
+    white-space: nowrap;
+  }
+}
+
+svg.external-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.25em;
+}
+
+.wireeater-card-content {
+  @include rhythm.rhythm(1.125rem, $lines: 1.8);
+
+  @include theme.link(var(--accent-right-lite), 2 * rhythm.$px);
+  a { font-weight: 500; }
+
+  & > p {
+    @include rhythm.margins(0.9);
+  }
+
+  & > p:first-child,
+  & > h1 + p, & > h2 + p, & > h3 + p,
+  & > h4 + p, & > h5 + p, & > h6 + p {
+    margin-top: 0;
+  }
+
+  & > p:last-child {
+    margin-bottom: rhythm.rh(0.25);
+  }
+}
+
+mark {
+  color: var(--fg-color);
+  background-color: var(--accent-left-lite);
+  font-weight: 400;
+
+  border-radius: 0.25rem;
+  padding: 0 0.125em;
+}

@@ -1,0 +1,65 @@
+/*
+ * post-specific styles
+ */
+
+@use 'common/flex';
+@use 'common/media';
+@use 'common/rhythm';
+
+//----------------------------------------------------------
+// post header
+
+article.post {
+  // rule for the post header layout:
+  //
+  // on mobile:
+  //
+  // title
+  // └──subtitle
+  //                          date
+  //
+  // and elsewhere, optimistically:
+  //
+  // title                    date
+  // └──subtitle
+  //
+  // i.e., we basically don't want long titles in the presence of subtitles,
+  // which seems reasonable enough since that's a lot of title text.
+  //
+  // @see partials/_feed and layouts/post for the rest.
+  & > header {
+    display: flex;
+    flex-direction: column;
+
+    @include media.tablet {
+      flex-flow: row wrap;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+  }
+}
+
+h2.subtitle {
+  color: var(--fg-color);
+  font-weight: 500;
+
+  &:before {
+    color: var(--accent-right);
+    content: "\2514\2500"; // L-shaped box-drawing characters
+    padding-right: 0.25em;
+  }
+
+  // offset for the L; convenient the characters are exactly 1em
+  text-indent: -2.25em;
+  padding-left: 2.25em;
+}
+
+time.date {
+  color: var(--accent-right-lite);
+  font-style: italic;
+}
+
+svg.external-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

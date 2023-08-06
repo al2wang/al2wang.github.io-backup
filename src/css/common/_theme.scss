@@ -1,0 +1,65 @@
+/*
+ * theme utilities
+ */
+
+@use 'common/rhythm';
+@use 'common/polyfill' as pf;
+
+//-----------------------------------------------------------------------------
+
+$sans-serif: 'Source Sans 3', 'Helvetica', 'Arial', sans-serif;
+
+//-----------------------------------------------------------------------------
+
+@function accent-shadow($off-px) {
+  @return #{
+    rhythm.px-to-rem($off-px)     rhythm.px-to-rem($off-px)     var(--accent-left),
+    rhythm.px-to-rem(2 * $off-px) rhythm.px-to-rem(2 * $off-px) var(--accent-right)
+  };
+}
+
+/*
+ * link styling for <a>link</a>
+ */
+@mixin link($accent-color, $line-weight) {
+  a {
+    @include pf.text-decoration(underline, solid, $accent-color, $line-weight);
+    transition: color var(--defocus-time);
+
+    &:hover {
+      color: $accent-color;
+      transition: color var(--focus-time);
+    }
+  }
+}
+
+/*
+ * link styling for this DOM hierarchy:
+ *
+ *    link-container
+ *      a
+ *        span
+ *          {text}
+ *        ?svg
+ *        ...
+ */
+@mixin link-container($accent-color, $line-weight) {
+  transition: color var(--defocus-time);
+
+  &:hover {
+    color: $accent-color;
+
+    & > a, & > svg {
+      color: $accent-color;
+      transition: color var(--focus-time);
+    }
+  }
+
+  & > a {
+    text-decoration: none;
+
+    & > span {
+      @include pf.text-decoration(underline, solid, $accent-color, $line-weight);
+    }
+  }
+}

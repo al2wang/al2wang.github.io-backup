@@ -1,0 +1,10 @@
+---
+---
+
+@use 'common/media';
+
+figure#not-found {
+  @include media.tablet {
+    max-width: 552px;
+  }
+}
